@@ -1,6 +1,10 @@
 """
 Based on the python xreload.
 
+GitHub: https://github.com/fyrestone/pydevd_reload
+Original: https://github.com/fabioz/PyDev.Debugger/blob/master/_pydevd_bundle/pydevd_reload.py
+
+
 Changes
 ======================
 
@@ -102,6 +106,8 @@ import sys
 import traceback
 import types
 
+__version__ = '1.0'
+
 NO_DEBUG = 0
 LEVEL1 = 1
 LEVEL2 = 2
@@ -180,7 +186,7 @@ def xreload(mod):
     r = Reload(mod)
     r.apply()
     found_change = r.found_change
-    r = None
+    # r = None
     # pydevd_dont_trace.clear_trace_filter_cache()
     return found_change
 

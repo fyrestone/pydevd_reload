@@ -11,7 +11,7 @@ If you don't have much time, just perform
 
  `$ pip install pydevd_reload`
 
-which will install just the module on your system.
+which will install the module(without tests) on your system.
 
 Also, you can just copy & paste the pydevd_reload.py which require no third-party dependency.
 
@@ -26,7 +26,7 @@ Just import pydevd_reload and use pydevd_reload.xreload as the reload built-in f
     import pydevd_reload
     pydevd_reload.xreload(module_instance)
 	
-pydevd_reload reload code objects in a module by default, and provide __xreload_old_new__ and __xreload_after_reload_update__ custom hook allow user update data in a module:
+pydevd_reload reload code objects in a module by default, and provide ``__xreload_old_new__`` and ``__xreload_after_reload_update__`` custom hooks which allow user to update data in a module:
 
 
 Original module:
@@ -71,7 +71,7 @@ This standalone pydevd_reload library has following improvements than original p
 
 - Added code object name check to avoid update monkey patched code. *
 
-- Refined reload callbacks. (eg, __xreload_old_new__ and __xreload_after_reload_update__)
+- Refined reload hooks. (eg, __xreload_old_new__ and __xreload_after_reload_update__)
 
 - Fixed __file__ attribute in namespace so they will be updated.
 

@@ -8,7 +8,7 @@ VERSION = dic['__version__']
 if __name__ == '__main__':
     setup(name='pydevd_reload',
           version=VERSION,
-          description='An enhanced reload module from pydev',
+          description='An enhanced reload module from PyDev',
           long_description=open('README.rst').read(),
           author='fyrestone',
           author_email='fyrestone@outlook.com',

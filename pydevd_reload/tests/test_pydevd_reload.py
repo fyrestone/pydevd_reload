@@ -1,8 +1,8 @@
 import os  # @NoMove
 import sys  # @NoMove
-sys.path.insert(0, os.path.realpath(os.path.abspath('..')))
+sys.path.insert(0, os.path.realpath(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))))
 
-from pydevd_reload import pydevd_reload
+import pydevd_reload
 import tempfile
 import unittest
 

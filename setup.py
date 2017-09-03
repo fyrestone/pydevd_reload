@@ -20,7 +20,7 @@ if __name__ == '__main__':
           platforms=["All"],
           classifiers=['Development Status :: 5 - Production/Stable',
                        'Intended Audience :: Developers',
-                       'License :: OSI Approved :: Eclipse Public License',
+                       'License :: OSI Approved :: Eclipse Public License 1.0 (EPL-1.0)',
                        'Natural Language :: English',
                        'Operating System :: OS Independent',
                        'Programming Language :: Python :: 2',

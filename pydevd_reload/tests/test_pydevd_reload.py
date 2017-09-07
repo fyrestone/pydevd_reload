@@ -371,6 +371,7 @@ CONSTANT = 2
 def __xreload_old_new__(namespace, name, old, new):
     if name == 'CONSTANT':
         namespace[name] = new
+        return True
 
 class B(object):
     def foo(self):
@@ -401,6 +402,7 @@ def __xreload_after_reload_update__(old_namespace, new_namespace):
     assert(old_namespace['CONSTANT'] == 1)
     assert(new_namespace['CONSTANT'] == 2)
     old_namespace['CONSTANT'] = new_namespace['CONSTANT']
+    return True
 
 class B(object):
     def foo(self):
@@ -434,6 +436,7 @@ class B(object):
     @classmethod
     def __xreload_after_reload_update__(cls, old_namespace, new_namespace):
         cls.CONSTANT = 2
+        return True
 
     def foo(self):
         return self.CONSTANT
@@ -467,6 +470,8 @@ class B(object):
     def __xreload_old_new__(cls, name, old, new):
         if name == 'CONSTANT':
             cls.CONSTANT = new
+            return True
+        return False
     __xreload_old_new__ = classmethod(__xreload_old_new__)
 
     def foo(self):
@@ -510,7 +515,36 @@ class B(object):
         self.assertEqual(10, b.bar)
         self.assertRaises(Exception, setattr, b, 'foo', 20) #__slots__ can't be updated
 
+    def test_update_with_decorator(self):
+            SAMPLE_CODE1 = """
+def test_decorator(func):
+    def _wrapper():
+        return func()
+    return _wrapper
+            
+@test_decorator
+def foo():
+    return 1
+    
+"""
+            SAMPLE_CODE2 = """
+def test_decorator(func):
+    def _wrapper():
+        return func()
+    return _wrapper
+      
+@test_decorator      
+def foo():
+    return 2
 
+"""
+
+            self.make_mod(sample=SAMPLE_CODE1)
+            import x  # @UnresolvedImport
+            self.assertEqual(x.foo(), 1)
+            self.make_mod(sample=SAMPLE_CODE2)
+            pydevd_reload.xreload(x)
+            self.assertEqual(x.foo(), 2)
 
 
 if __name__ == "__main__":

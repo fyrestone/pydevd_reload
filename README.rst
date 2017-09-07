@@ -25,7 +25,7 @@ Just import pydevd_reload and use pydevd_reload.xreload as the reload built-in f
 
     import pydevd_reload
     pydevd_reload.xreload(module_instance)
-	
+
 pydevd_reload reload code objects in a module by default, and provide ``__xreload_old_new__`` and ``__xreload_after_reload_update__`` custom hooks which allow user to update data in a module:
 
 
@@ -33,30 +33,30 @@ Original module:
 
 .. code-block:: python
 
-	class B(object):
-		CONSTANT = 1
+    class B(object):
+        CONSTANT = 1
 
-		def foo(self):
-			return self.CONSTANT
-			
-			
+        def foo(self):
+            return self.CONSTANT
+
+
 Updated module:
 
 .. code-block:: python
 
-	class B(object):
-		CONSTANT = 2
+    class B(object):
+        CONSTANT = 2
 
-		# Custom hooks can be added in a reload.
-		def __xreload_old_new__(cls, name, old, new):
-			if name == 'CONSTANT':
-				cls.CONSTANT = new
-				return True
-			return False
-		__xreload_old_new__ = classmethod(__xreload_old_new__)
+        # Custom hooks can be added in a reload.
+        def __xreload_old_new__(cls, name, old, new):
+            if name == 'CONSTANT':
+                cls.CONSTANT = new
+                return True
+            return False
+        __xreload_old_new__ = classmethod(__xreload_old_new__)
 
-		def foo(self):
-			return self.CONSTANT	
+        def foo(self):
+            return self.CONSTANT
 
 
 Improvements

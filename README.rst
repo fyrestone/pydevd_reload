@@ -45,13 +45,14 @@ Updated module:
 .. code-block:: python
 
 	class B(object):
-
 		CONSTANT = 2
 
 		# Custom hooks can be added in a reload.
 		def __xreload_old_new__(cls, name, old, new):
 			if name == 'CONSTANT':
 				cls.CONSTANT = new
+				return True
+			return False
 		__xreload_old_new__ = classmethod(__xreload_old_new__)
 
 		def foo(self):

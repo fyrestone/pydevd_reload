@@ -105,6 +105,10 @@ import imp
 import sys
 import traceback
 import types
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
 
 __version__ = '1.0'
 
@@ -443,16 +447,23 @@ class Reload(object):
         # Update func_closure:
         # 1, skip if function closure count mismatch,
         # 2, only do update by the same function closure sequence.
-        old_cell_num = len(oldfunc.func_closure) if oldfunc.func_closure else 0
-        new_cell_num = len(newfunc.func_closure) if newfunc.func_closure else 0
 
-        if old_cell_num != new_cell_num:
+        try:
+            newfunc.__closure__
+            attr_name = '__closure__'
+        except AttributeError:
+            newfunc.func_closure
+            attr_name = 'func_closure'
+
+        old_closure = getattr(oldfunc, attr_name) or []
+        new_closure = getattr(newfunc, attr_name) or []
+
+        if len(old_closure) != len(new_closure):
             notify_error('Closure count of: %s changed... Skipping.' % (oldfunc,))
             return oldfunc
 
-        if old_cell_num > 0:
-            for index, cell in enumerate(oldfunc.func_closure):
-                self._update(None, None, cell.cell_contents, newfunc.func_closure[index].cell_contents)
+        for old_cell, new_cell in izip(old_closure, new_closure):
+            self._update(None, None, old_cell.cell_contents, new_cell.cell_contents)
 
         return oldfunc
 

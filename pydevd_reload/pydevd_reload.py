@@ -259,15 +259,13 @@ class Reload(object):
                     # Compiled Python file consist of
                     # 1, magic number (4 bytes) to determine type and version of Python,
                     # 2, timestamp (4 bytes) to check whether we have newer source,
-                    # 3, marshaled code object.
+                    # 3, size of source file (4 bytes) since Python 3.3+,
+                    # 4, marshaled code object.
                     # see also, pkgutil.read_code and runpy._get_code_from_file
-                    try:
-                        stream.read(8)
-                        code = marshal.load(stream)
-                    except:
-                        # The latest python 3.x changed pyc header
+                    stream.read(8)
+                    if sys.version_info.major == 3 and sys.version_info.minor >= 3:
                         stream.read(4)
-                        code = marshal.load(stream)
+                    code = marshal.load(stream)
             finally:
                 if stream:
                     stream.close()

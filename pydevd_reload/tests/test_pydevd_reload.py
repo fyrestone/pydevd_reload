@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.realpath(os.path.abspath(os.path.join(os.path.dirname
 import pydevd_reload
 import tempfile
 import unittest
+import py_compile
 
 
 SAMPLE_CODE = """
@@ -50,7 +51,7 @@ class Test(unittest.TestCase):
         except:
             pass
 
-    def make_mod(self, name="x", repl=None, subst=None, sample=SAMPLE_CODE):
+    def make_mod(self, name="x", repl=None, subst=None, sample=SAMPLE_CODE, compiled=False):
         fn = os.path.join(self.tempdir, name + ".py")
         f = open(fn, "w")
         if repl is not None and subst is not None:
@@ -59,6 +60,12 @@ class Test(unittest.TestCase):
             f.write(sample)
         finally:
             f.close()
+        if compiled:
+            fn_compiled = fn + 'c'
+            py_compile.compile(fn, fn_compiled)
+            assert os.path.exists(fn_compiled)
+            os.remove(fn)
+            assert not os.path.exists(fn)
 
 
     def test_pydevd_reload(self):
@@ -103,6 +110,47 @@ class Test(unittest.TestCase):
             pydevd_reload.xreload(x)
             check(count)
 
+    def test_update_compiled_code(self):
+
+        self.make_mod(compiled=True)
+        import x  # @UnresolvedImport
+
+        C = x.C
+        COut = C
+        Cfoo = C.foo
+        Cbar = C.bar
+        Cstomp = C.stomp
+
+        def check2(expected):
+            C = x.C
+            Cfoo = C.foo
+            Cbar = C.bar
+            Cstomp = C.stomp
+            b = C()
+            bfoo = b.foo
+            self.assertEqual(expected, b.foo())
+            self.assertEqual(expected, bfoo())
+            self.assertEqual(expected, Cfoo(b))
+
+        def check(expected):
+            b = COut()
+            bfoo = b.foo
+            self.assertEqual(expected, b.foo())
+            self.assertEqual(expected, bfoo())
+            self.assertEqual(expected, Cfoo(b))
+            self.assertEqual((expected, expected), Cbar())
+            self.assertEqual((expected, expected, expected), Cstomp())
+            check2(expected)
+
+        check(0)
+
+        # modify mod and reload
+        count = 0
+        while count < 1:
+            count += 1
+            self.make_mod(repl="0", subst=str(count), compiled=True)
+            pydevd_reload.xreload(x)
+            check(count)
 
     def test_pydevd_reload2(self):
 

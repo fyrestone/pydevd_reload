@@ -39,7 +39,7 @@ So, function is the basic logic structure of a program. The code logic hides in 
 
 1. pydevd_reload don't recreate the old namespace from new classes. Rather, it keeps the existing namespace, load a new version of it and update only some of the things pydevd_reload can inplace. That way, pydevd_reload don't break things such as singletons or end up with a second representation of the same class in memory.
 
-2. If pydevd_reload find it to be a __metaclass__, then try to update it as a regular class.
+2. If pydevd_reload find it to be a '__metaclass__', then try to update it as a regular class.
 
 3. pydevd_reload don't remove old attributes (and leave them lying around even if they're no longer used).
 

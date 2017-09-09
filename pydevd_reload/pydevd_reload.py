@@ -387,7 +387,7 @@ class Reload(object):
                             ret = xreload_old_new(name, oldobj, newobj)
                             if ret not in [True, False]:
                                 func_name = '.'.join([namespace.__name__, xreload_old_new.__name__])
-                                notify_error('Unexpected return value %s of function %s' % (ret, func_name))
+                                notify_error('Unexpected return value %s of function %s.' % (ret, func_name))
                             elif ret is True:
                                 self.found_change = True
 
@@ -397,7 +397,7 @@ class Reload(object):
                             ret = xreload_old_new(namespace, name, oldobj, newobj)
                             if ret not in [True, False]:
                                 func_name = '.'.join([namespace['__name__'], xreload_old_new.__name__])
-                                notify_error('Unexpected return value %s of function %s' % (ret, func_name))
+                                notify_error('Unexpected return value %s of function %s.' % (ret, func_name))
                             elif ret is True:
                                 self.found_change = True
 
@@ -417,6 +417,11 @@ class Reload(object):
         """Update a function object."""
         oldfunc.__doc__ = newfunc.__doc__
         oldfunc.__dict__.update(newfunc.__dict__)
+
+        try:
+            oldfunc.__annotations__ = newfunc.__annotations__
+        except AttributeError:
+            pass  # No function annotation in Python 2.x
 
         try:
             newfunc.__code__

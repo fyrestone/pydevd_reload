@@ -613,6 +613,27 @@ def foo(x, *args, **kwargs):
         pydevd_reload.xreload(x)
         self.assertEqual(x.foo(2, 3, 4, m=True), (2, (3, 4), {'m': True}))
 
+    def test_update_func_annotation(self):
+        SAMPLE_CODE1 = """
+def foo():
+    return 1
+
+"""
+        SAMPLE_CODE2 = """
+def foo(a: 'x', b: 5 + 6, c: list) -> max(2, 9):
+    return 2
+
+"""
+        def foo(): pass
+        if '__annotations__' not in dir(foo):
+            return
+        self.make_mod(sample=SAMPLE_CODE1)
+        import x  # @UnresolvedImport
+        self.assertEqual(x.foo.__annotations__, {})
+        self.make_mod(sample=SAMPLE_CODE2)
+        pydevd_reload.xreload(x)
+        self.assertEqual(x.foo.__annotations__, {'a': 'x', 'b': 11, 'c': list, 'return': 9})
+
 
 if __name__ == "__main__":
 #     import sys;sys.argv = ['', 'Test.test_reload_custom_code_after_changes_in_class']

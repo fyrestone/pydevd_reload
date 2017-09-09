@@ -37,13 +37,11 @@ A running python program consists of code logic and corresponding data. Code log
 
 So, function is the basic logic structure of a program. The code logic hides in the high-level function object, reloading is based on replacing the code object of function object. The running environment may change, which means it's probably dangerous to manipulate logic relevant data, so pydevd_reload provide custom hooks which allow data updates in demands.
 
-1. We don't recreate the old namespace from new classes. Rather, we keep the existing namespace,
-load a new version of it and update only some of the things we can inplace. That way, we don't break
-things such as singletons or end up with a second representation of the same class in memory.
+1. pydevd_reload don't recreate the old namespace from new classes. Rather, it keeps the existing namespace, load a new version of it and update only some of the things pydevd_reload can inplace. That way, pydevd_reload don't break things such as singletons or end up with a second representation of the same class in memory.
 
-2. If we find it to be a __metaclass__, we try to update it as a regular class.
+2. If pydevd_reload find it to be a __metaclass__, then try to update it as a regular class.
 
-3. We don't remove old attributes (and leave them lying around even if they're no longer used).
+3. pydevd_reload don't remove old attributes (and leave them lying around even if they're no longer used).
 
 4. Reload hooks were changed
 
@@ -73,7 +71,7 @@ pydevd_reload reloads code objects in a module by default, and provides ``__xrel
         def __xreload_old_new__(cls, name, old, new):
             pass
 
-    A class or module may include a method called '__xreload_old_new__' which is called when we're
+    A class or module may include a method called '__xreload_old_new__' which is called when pydevd_reload is
     unable to reload a given attribute.
 
 2. To do something after the whole reload is finished:

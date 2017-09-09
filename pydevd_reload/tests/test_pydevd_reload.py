@@ -594,6 +594,25 @@ def foo():
             pydevd_reload.xreload(x)
             self.assertEqual(x.foo(), 2)
 
+    def test_update_func_def(self):
+        SAMPLE_CODE1 = """
+def foo():
+    return 1
+
+"""
+        SAMPLE_CODE2 = """
+def foo(x, *args, **kwargs):
+    return x, args, kwargs
+
+"""
+
+        self.make_mod(sample=SAMPLE_CODE1)
+        import x  # @UnresolvedImport
+        self.assertEqual(x.foo(), 1)
+        self.make_mod(sample=SAMPLE_CODE2)
+        pydevd_reload.xreload(x)
+        self.assertEqual(x.foo(2, 3, 4, m=True), (2, (3, 4), {'m': True}))
+
 
 if __name__ == "__main__":
 #     import sys;sys.argv = ['', 'Test.test_reload_custom_code_after_changes_in_class']

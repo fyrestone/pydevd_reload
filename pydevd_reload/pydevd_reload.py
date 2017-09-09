@@ -110,7 +110,7 @@ try:
 except ImportError:
     izip = zip
 
-__version__ = '1.0'
+__version__ = '1.1'
 
 NO_DEBUG = 0
 LEVEL1 = 1

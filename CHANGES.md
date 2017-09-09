@@ -1,6 +1,13 @@
 HISTORY
 --------
 
+## 1.1 (2017-09-09)
+
+- Added support to update function annotation.
+- Added and fixed test case.
+- Fixed python 3 compatibility issue.
+- Refined README.
+
 ## 1.0 (2017-09-03)
 
 - Removed pydevd dependency.

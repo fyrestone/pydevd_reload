@@ -102,6 +102,7 @@ target namespace.
 import imp
 # from pydev_imports import Exec
 # import pydevd_dont_trace
+import os
 import sys
 import traceback
 import types
@@ -225,6 +226,11 @@ class Reload(object):
         try:
             # Get the module name, e.g. 'foo.bar.whatever'
             modname = mod.__name__
+            # Compatible with main module
+            mainmod = False
+            if modname == '__main__':
+                modname = os.path.splitext(os.path.basename(mod.__file__))[0]
+                mainmod = True
             # Get the module namespace (dict) early; this is part of the type check
             modns = mod.__dict__
             # Parse it into package name and module name, e.g. 'foo.bar' and 'whatever'
@@ -277,7 +283,10 @@ class Reload(object):
             # object.
             new_namespace = modns.copy()
             new_namespace.clear()
-            new_namespace["__name__"] = modns["__name__"]
+            if mainmod:
+                new_namespace["__name__"] = modname
+            else:
+                new_namespace["__name__"] = modns["__name__"]
             new_namespace["__file__"] = modns["__file__"]
             _exec(code, new_namespace)
             # Now we get to the hard part

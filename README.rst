@@ -109,6 +109,8 @@ This standalone pydevd_reload library has following improvements than original p
 
 - Added support to update function closure. *
 
+- Added support to update callable object. *
+
 - Added support to update function annotation.
 
 - Added code object name check to avoid update monkey patched code. *

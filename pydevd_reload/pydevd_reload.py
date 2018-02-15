@@ -350,26 +350,31 @@ class Reload(object):
             notify_info2('Updating: ', oldobj)
             if oldobj is newobj:
                 # Probably something imported
+                notify_info2('Identical objects: ', oldobj, newobj)
                 return
 
-            if type(oldobj) is not type(newobj):
+            if type(oldobj) is not type(newobj) and type(oldobj).__name__ != type(newobj).__name__:
                 # Cop-out: if the type changed, give up
                 notify_error('Type of: %s changed... Skipping.' % (oldobj,))
                 return
 
             if isinstance(newobj, types.FunctionType):
+                notify_info2('Update function: ', oldobj, newobj)
                 self._update_function(oldobj, newobj)
                 return
 
             if isinstance(newobj, types.MethodType):
+                notify_info2('Update method: ', oldobj, newobj)
                 self._update_method(oldobj, newobj)
                 return
 
             if isinstance(newobj, classmethod):
+                notify_info2('Update classmethod: ', oldobj, newobj)
                 self._update_classmethod(oldobj, newobj)
                 return
 
             if isinstance(newobj, staticmethod):
+                notify_info2('Update staticmethod: ', oldobj, newobj)
                 self._update_staticmethod(oldobj, newobj)
                 return
 
@@ -379,15 +384,23 @@ class Reload(object):
                 classtype = type
 
             if isinstance(newobj, classtype):
+                notify_info2('Update class: ', oldobj, newobj)
                 self._update_class(oldobj, newobj)
                 return
 
             # New: dealing with metaclasses.
             if hasattr(newobj, '__metaclass__') and hasattr(newobj, '__class__') and newobj.__metaclass__ == newobj.__class__:
+                notify_info2('Update metaclass: ', oldobj, newobj)
                 self._update_class(oldobj, newobj)
                 return
 
+            if hasattr(newobj, '__call__'):
+                notify_info2('Update callable: ', oldobj, newobj)
+                self._update_callable(oldobj, newobj)
+                return
+
             if namespace is not None:
+                notify_info2('Update data: ', newobj)
 
                 if oldobj != newobj and str(oldobj) != str(newobj) and repr(oldobj) != repr(newobj):
                     if is_class_namespace:
@@ -537,3 +550,31 @@ class Reload(object):
         # We don't have the class available to pass to __get__() but any
         # object except None will do.
         self._update(None, None, oldsm.__get__(0), newsm.__get__(0))
+
+
+    def _update_callable(self, oldcb, newcb):
+        """
+        Update a callable object, this object may contains one or many
+        functions. But for performance issue, we only update first level
+        of object's dict.
+        """
+        olddict = oldcb.__dict__
+        newdict = newcb.__dict__
+
+        oldnames = set(olddict)
+        newnames = set(newdict)
+
+        for name in newnames - oldnames:
+            setattr(oldcb, name, newdict[name])
+            notify_info0('Added:', name, 'to', oldcb)
+            self.found_change = True
+
+        # Note: not removing old things...
+        # for name in oldnames - newnames:
+        #    notify_info('Removed:', name, 'from', oldclass)
+        #    delattr(oldclass, name)
+
+        for name in (oldnames & newnames) - {'__dict__', '__doc__'}:
+            self._update(oldcb, name, olddict[name], newdict[name])
+
+        # self._update_class(type(oldcb), type(newcb))

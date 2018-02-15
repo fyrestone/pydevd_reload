@@ -634,6 +634,60 @@ def foo(a: 'x', b: 5 + 6, c: list) -> max(2, 9):
         pydevd_reload.xreload(x)
         self.assertEqual(x.foo.__annotations__, {'a': 'x', 'b': 11, 'c': list, 'return': 9})
 
+    def test_callable_object(self):
+        SAMPLE_CODE1 = """
+def foo(fn):
+    class Callable(object):
+        def __init__(self, fn):
+            self._fn = fn
+            
+        def __get__(self, obj, cls):
+            if obj is None:
+                return self
+            method = self._fn.__get__(obj, cls)
+            return Callable(method)
+            
+        def __call__(self, *args, **kwargs):
+            return self._fn(*args, **kwargs)
+            
+    return Callable(fn)
+    
+class B(object):
+    @foo
+    def bar(self, x):
+        return 1 + x
+"""
+        SAMPLE_CODE2 = """
+def foo(fn):
+    class Callable(object):
+        def __init__(self, fn):
+            self._fn = fn
+            
+        def __get__(self, obj, cls):
+            if obj is None:
+                return self
+            method = self._fn.__get__(obj, cls)
+            return Callable(method)
+
+        def __call__(self, *args, **kwargs):
+            return self._fn(*args, **kwargs)
+
+    return Callable(fn)
+
+class B(object):
+    @foo
+    def bar(self, x):
+        return 2 + x
+"""
+        self.make_mod(sample=SAMPLE_CODE1)
+        import x  # @UnresolvedImport
+        bar = x.B().bar
+        self.assertEqual(bar(1), 2)
+        self.make_mod(sample=SAMPLE_CODE2)
+        pydevd_reload.xreload(x)
+        self.assertEqual(bar(1), 3)
+
+
 
 if __name__ == "__main__":
 #     import sys;sys.argv = ['', 'Test.test_reload_custom_code_after_changes_in_class']

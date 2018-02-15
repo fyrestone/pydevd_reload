@@ -1,6 +1,11 @@
 HISTORY
 --------
 
+## 1.2 (2018-02-15)
+
+- Compatible with main module.
+- Added support to update callable object. *
+
 ## 1.1 (2017-09-09)
 
 - Added support to update function annotation.

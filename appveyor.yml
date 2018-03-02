@@ -102,6 +102,9 @@ install:
   # Python 2.6 anymore. Once we drop support for Python 2.6 we can use the
   # latest version of wheel.
   - "pip install wheel==0.29.0"
+  
+  # install pytest
+  - "pip install . pytest"
 
 build_script:
   # Build the compiled extension

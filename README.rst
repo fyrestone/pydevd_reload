@@ -1,5 +1,8 @@
 .. image:: https://travis-ci.org/fyrestone/pydevd_reload.svg?branch=master
     :target: https://travis-ci.org/fyrestone/pydevd_reload
+
+.. image:: https://ci.appveyor.com/api/projects/status/p0v0511l7saxw2ib/branch/master?svg=true
+    :target: https://ci.appveyor.com/project/fyrestone/pydevd-reload/branch/master
     
 pydevd_reload
 ==============

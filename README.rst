@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/fyrestone/pydevd_reload.svg?branch=master
+    :target: https://travis-ci.org/fyrestone/pydevd_reload
+    
 pydevd_reload
 ==============
 

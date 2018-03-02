@@ -4,7 +4,6 @@ environment:
     # /E:ON and /V:ON options are not enabled in the batch script intepreter
     # See: http://stackoverflow.com/a/13751649/163740
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
-    JANSSON_VERSION: "2.10"
 
   matrix:
 
@@ -102,7 +101,7 @@ install:
   # wheel version 0.29.0 is enforced because version 0.30.0 doesn't support
   # Python 2.6 anymore. Once we drop support for Python 2.6 we can use the
   # latest version of wheel.
-  - "%CMD_IN_ENV% pip install wheel==0.29.0"
+  - "pip install wheel==0.29.0"
 
   # This is workaround for solving an issue caused by CMake not finding an
   # appropriate compilet for Visual Studio 9 2008 Win64. This workaround was

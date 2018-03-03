@@ -14,52 +14,42 @@ environment:
     - PYTHON: "C:\\Python27"
       PYTHON_VERSION: "2.7.x"
       PYTHON_ARCH: "32"
-      VS: "Visual Studio 9 2008"
 
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.x"
       PYTHON_ARCH: "64"
-      VS: "Visual Studio 9 2008 Win64"
 
     - PYTHON: "C:\\Python33"
       PYTHON_VERSION: "3.3.x"
       PYTHON_ARCH: "32"
-      VS: "Visual Studio 10 2010"
 
     - PYTHON: "C:\\Python33-x64"
       PYTHON_VERSION: "3.3.x"
       PYTHON_ARCH: "64"
-      VS: "Visual Studio 10 2010 Win64"
 
     - PYTHON: "C:\\Python34"
       PYTHON_VERSION: "3.4.x"
       PYTHON_ARCH: "32"
-      VS: "Visual Studio 10 2010"
 
     - PYTHON: "C:\\Python34-x64"
       PYTHON_VERSION: "3.4.x"
       PYTHON_ARCH: "64"
-      VS: "Visual Studio 10 2010 Win64"
 
     - PYTHON: "C:\\Python35"
       PYTHON_VERSION: "3.5.x"
       PYTHON_ARCH: "32"
-      VS: "Visual Studio 14 2015"
 
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.x"
       PYTHON_ARCH: "64"
-      VS: "Visual Studio 14 2015"
       
     - PYTHON: "C:\\Python36"
       PYTHON_VERSION: "3.6.x"
       PYTHON_ARCH: "32"
-      VS: "Visual Studio 14 2015"
 
     - PYTHON: "C:\\Python36-x64"
       PYTHON_VERSION: "3.6.x"
       PYTHON_ARCH: "64"
-      VS: "Visual Studio 14 2015"
 
 install:
   # If there is a newer build queued for the same PR, cancel this one.

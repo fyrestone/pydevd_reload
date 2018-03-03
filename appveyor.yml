@@ -104,7 +104,7 @@ install:
   - "pip install wheel==0.29.0"
   
   # install pytest
-  - "pip install . pytest"
+  - "pip install pytest"
 
 build_script:
   # Build the compiled extension

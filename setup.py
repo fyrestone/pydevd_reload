@@ -1,4 +1,5 @@
 from setuptools import setup
+from setuptools.extension import Extension
 
 dic = {}
 exec(open('pydevd_reload/pydevd_reload.py').read(), dic)
@@ -14,8 +15,8 @@ if __name__ == '__main__':
           author_email='fyrestone@outlook.com',
           url='https://github.com/fyrestone/pydevd_reload',
           license="Eclipse Public License",
-          package_dir={'': 'pydevd_reload'},
-          py_modules=['pydevd_reload'],
+          packages=['pydevd_reload'],
+          ext_modules=[Extension("pydevd_reload._pydevd_reload", ["pydevd_reload/_pydevd_reload.c"])],
           keywords="reload generic utility",
           platforms=["All"],
           classifiers=['Development Status :: 5 - Production/Stable',
